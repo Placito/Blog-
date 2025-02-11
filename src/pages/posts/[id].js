@@ -1,10 +1,11 @@
+// the detaild page for each post
 import React from "react";
 import Link from "next/link";
 import { fetchPosts } from "../services/posts"; // Import the fetchPosts function
 
 // Fetch posts at build time using getStaticProps
 export async function getStaticProps() {
-  const posts = await fetchPosts(); // Call the fetchPosts method from services/posts.js
+  const posts = await fetchPosts(); // Use the imported function
   return {
     props: {
       posts,
@@ -26,7 +27,7 @@ export default function Home({ posts }) {
                 {/* Post Title */}
                 <h2 className="text-xl font-semibold mb-2">
                   <Link href={`/posts/${post.id}`}>
-                    {post.title}
+                    <a className="text-blue-600 hover:underline">{post.title}</a>
                   </Link>
                 </h2>
                 {/* Post Body (First 100 characters) */}
@@ -34,8 +35,8 @@ export default function Home({ posts }) {
                   {post.body.slice(0, 100)}...
                 </p>
                 {/* "Read More" Link */}
-                <Link href={`/posts/${post.id}`} className="text-blue-500 hover:underline">
-                  Read More
+                <Link href={`/posts/${post.id}`}>
+                  <a className="text-blue-500 hover:underline">Read More</a>
                 </Link>
               </div>
             ))}
