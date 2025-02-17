@@ -22,7 +22,7 @@ export default function Home({ posts }) {
           {/* Responsive Grid Layout */}
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
             {posts.map((post) => (
-              <div key={post.id} className="border rounded-lg shadow-lg p-4">
+              <div key={post.id} className="border rounded-lg shadow-lg p-4 bg-white">
                 {/* Post Title */}
                 <h2 className="text-xl font-semibold mb-2">
                   <Link href={`/posts/${post.id}`}>
