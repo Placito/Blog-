@@ -1,36 +1,105 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Blog Application with Next.js and Tailwind CSS
 
-## Getting Started
+Objective
 
-First, run the development server:
+This project is a responsive blog application built with Next.js and Tailwind CSS. It fetches and displays blog posts from an API, utilizes dynamic routing, and ensures a seamless user experience across different devices.
 
+Features
+
+1. Homepage (/)
+
+    * Fetches a list of blog posts from the JSONPlaceholder API using getStaticProps.
+
+    * Displays posts in a responsive grid layout using Tailwind CSS.
+
+    * Each blog post card includes:
+
+        - Title (clickable link to post details page).
+
+        - First 100 characters of the body.
+
+        - "Read More" link leading to the full post page.
+
+2. Post Details Page (/post/[id])
+
+    * Implements a dynamic route (/post/[id]).
+
+    * Uses getStaticPaths and getStaticProps to pre-generate pages for each post.
+
+    * Displays the full post details:
+
+        - Title
+
+        - Full body
+
+        - Post ID and Author (userId field)
+
+3. Search Functionality (Optional Hashtag Search)
+
+    * Allows users to filter posts by clicking on hashtags.
+
+    * Provides precise results without needing a title-based search.
+
+4. Responsive Design
+
+    * Optimized for desktop, tablet, and mobile using Tailwind CSS.
+
+5. Navigation Bar
+
+    * Includes links to:
+
+        - Home (/)
+
+        - About (/about) (Placeholder page)
+
+        - Highlights the active route using Tailwind's active class.
+
+
+## Installation & Setup
+
+Prerequisites:
+
+    * Ensure you have Node.js and npm installed.
+
+Steps to Set Up the Project:
+
+Clone the repository:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+git clone https://github.com/your-username/blog-app.git
+cd blog-app
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Install dependencies:
+```bash
+npm install
+````
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+Run the development server:
+```bash
+npm run dev
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Open in browser:
+Visit http://localhost:3000
 
-## Learn More
+## Approach & Advanced Features
 
-To learn more about Next.js, take a look at the following resources:
+* Next.js Static Site Generation (SSG):
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    - Used getStaticProps for fetching posts at build time.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    - Used getStaticPaths for pre-rendering post pages.
 
-## Deploy on Vercel
+* Tailwind CSS:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    - Designed a clean and responsive layout.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+    - Utilized utility classes for rapid styling.
+
+* Reusability & Maintainability:
+
+    - Separated components for Navbar, Footer, and Post Cards.
+
+* Deployed to Vercel:
+
+    - Live preview available at []
