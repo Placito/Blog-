@@ -125,7 +125,7 @@ export default function Navbar() {
               <li key={index}>
                 <Link
                   href={item.href}
-                  className="block text-gray-700 text-center py-2 hover:text-red-500 mb-2"
+                  className="block text-gray-700 text-left pl-3 py-2 hover:text-red-500 mb-1 hover:bg-gray-100 border-b border-black"
                   onClick={handleMenuItemClick} // Close menu when item is clicked
                 >
                   {item.name}
@@ -133,7 +133,7 @@ export default function Navbar() {
               </li>
             ))}
             {/* Search Bar for Mobile */}
-            <form onSubmit={handleSearchSubmit} className="relative mx-auto w-3/4 mb-2">
+            <form onSubmit={handleSearchSubmit} className="relative text-left p-1 ">
               <input
                 type="text"
                 className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500"
