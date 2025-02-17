@@ -23,6 +23,7 @@ html, body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+
 /* Ensures the main app container stretches fully */
 #__next {
   min-height: 100dvh;
