@@ -1,178 +1,163 @@
 "use client";
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import React from "react";
-import { useRouter } from "next/router"; // Import useRouter from next/router
-import { fetchPosts } from "../services/posts"; // Import the fetchPosts function
+import { useRouter } from "next/router";
+import { fetchPosts } from "../services/posts";
 
 export default function Navbar() {
   const [searchQuery, setSearchQuery] = useState("");
-  const router = useRouter(); // Use useRouter hook from Next.js
+  const router = useRouter();
   const [filteredSuggestions, setFilteredSuggestions] = useState([]);
-  const [posts, setPosts] = useState([]); // To store the fetched posts
+  const [posts, setPosts] = useState([]);
+  const [isOpen, setIsOpen] = useState(false); // State for mobile menu toggle
 
-  // Navigation items array
   const navItems = [
     { name: "Home", href: "/" },
     { name: "About", href: "/about" },
   ];
 
   useEffect(() => {
-    // Fetch posts from the API when the component mounts
     const loadPosts = async () => {
       const postsData = await fetchPosts();
-      setPosts(postsData); // Store posts data
+      setPosts(postsData);
     };
     loadPosts();
   }, []);
 
-  /// Handle input change
   const handleSearchChange = (e) => {
     const value = e.target.value;
     setSearchQuery(value);
-
-    // Filter posts based on title, userId, or id
     const filtered = posts.filter((post) => {
       const titleMatch = post.title.toLowerCase().includes(value.toLowerCase());
       const userIdMatch = post.userId.toString().includes(value);
       const idMatch = post.id.toString().includes(value);
       return titleMatch || userIdMatch || idMatch;
     });
-
     setFilteredSuggestions(filtered);
   };
 
-  // Handle suggestion click
   const handleSuggestionClick = (post) => {
-    setSearchQuery(post.title);
-    setFilteredSuggestions([]);
-    router.push(`/posts/${post.id}`); // Navigate to the post page using the post's ID
+    setSearchQuery(post.title); // Set search query to the selected post title
+    setFilteredSuggestions([]); // Clear suggestions
+    router.push(`/posts/${post.id}`); // Navigate to the post's page
+    setIsOpen(false); // Close mobile menu when a suggestion is clicked
+    setSearchQuery(""); // Reset the search input field
   };
 
-  // Handle form submit (e.g., pressing Enter)
   const handleSearchSubmit = (e) => {
     e.preventDefault();
-    console.log("Search query:", searchQuery);
-    // Optional: You can add logic to search by title or ID if needed
     const foundPost = posts.find(
       (post) => post.title.toLowerCase() === searchQuery.toLowerCase()
     );
     if (foundPost) {
-      router.push(`/posts/${foundPost.id}`); // Navigate to the post page if a match is found
+      router.push(`/posts/${foundPost.id}`);
     }
-    setSearchQuery(""); // Clear the search input
+    setSearchQuery(""); // Reset the search input field after submitting
+  };
+
+  const handleMenuItemClick = () => {
+    setIsOpen(false); // Close the menu when an item is clicked
   };
 
   return (
-    <div>
-      <nav className="block w-full max-w-screen px-4 py-4 mx-auto bg-white bg-opacity-90 sticky top-3 shadow lg:px-8 backdrop-blur-lg backdrop-saturate-150 z-[9999]">
-        <div className="container flex flex-wrap items-center justify-between mx-auto text-slate-800">
-          <Link
-            href="/"
-            className="mr-4 block cursor-pointer py-1.5 text-red-600 font-bold text-2xl active:text-red-800"
-          >
-            <svg
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 16 16"
-              className="w-8 h-8" // You can control the size with Tailwind CSS
-            >
-              <g clipPath="url(#a)">
-                <path
-                  fillRule="evenodd"
-                  clipRule="evenodd"
-                  d="M10.27 14.1a6.5 6.5 0 0 0 3.67-3.45q-1.24.21-2.7.34-.31 1.83-.97 3.1M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.48-1.52a7 7 0 0 1-.96 0H7.5a4 4 0 0 1-.84-1.32q-.38-.89-.63-2.08a40 40 0 0 0 3.92 0q-.25 1.2-.63 2.08a4 4 0 0 1-.84 1.31zm2.94-4.76q1.66-.15 2.95-.43a7 7 0 0 0 0-2.58q-1.3-.27-2.95-.43a18 18 0 0 1 0 3.44m-1.27-3.54a17 17 0 0 1 0 3.64 39 39 0 0 1-4.3 0 17 17 0 0 1 0-3.64 39 39 0 0 1 4.3 0m1.1-1.17q1.45.13 2.69.34a6.5 6.5 0 0 0-3.67-3.44q.65 1.26.98 3.1M8.48 1.5l.01.02q.41.37.84 1.31.38.89.63 2.08a40 40 0 0 0-3.92 0q.25-1.2.63-2.08a4 4 0 0 1 .85-1.32 7 7 0 0 1 .96 0m-2.75.4a6.5 6.5 0 0 0-3.67 3.44 29 29 0 0 1 2.7-.34q.31-1.83.97-3.1M4.58 6.28q-1.66.16-2.95.43a7 7 0 0 0 0 2.58q1.3.27 2.95.43a18 18 0 0 1 0-3.44m.17 4.71q-1.45-.12-2.69-.34a6.5 6.5 0 0 0 3.67 3.44q-.65-1.27-.98-3.1"
-                  fill="#666"
-                />
-              </g>
-              <defs>
-                <clipPath id="a">
-                  <path fill="#fff" d="M0 0h16v16H0z" />
-                </clipPath>
-              </defs>
-            </svg>
+    <nav className="w-full bg-white shadow-md sticky top-0 z-50">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="flex justify-between items-center py-4">
+          {/* Logo */}
+          <Link href="/" className="text-2xl font-bold text-gray-700 hover:text-red-500">
+            Blog
           </Link>
-
-          {/* Menu links - Horizontal Layout */}
-          <div className="flex items-center space-x-6">
+          {/* Desktop Menu */}
+          <div className="hidden md:flex space-x-6 justify-center items-center">
             {navItems.map((item, index) => (
-              <li
+              <Link
                 key={index}
-                className="flex items-center p-1 text-lg gap-x-2 text-slate-600 hover:text-red-500"
+                href={item.href}
+                className="text-gray-700 hover:text-red-500"
               >
-                <Link href={item.href} className="flex items-center">
+                {item.name}
+              </Link>
+            ))}
+
+            {/* Desktop Search Bar  */}
+            <form onSubmit={handleSearchSubmit} className="relative">
+              <input
+                type="text"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-64 focus:ring-2 focus:ring-blue-500"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              {filteredSuggestions.length > 0 && (
+                <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-lg z-10">
+                  {filteredSuggestions.map((post) => (
+                    <li
+                      key={post.id}
+                      className="p-2 cursor-pointer hover:bg-gray-100"
+                      onClick={() => handleSuggestionClick(post)} // Close menu when suggestion is clicked
+                    >
+                      {post.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </form>
+          </div>
+          {/* Mobile Menu Button */}
+          <button
+            className="md:hidden text-gray-700 focus:outline-none"
+            onClick={() => setIsOpen(!isOpen)}
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" strokeWidth="2" viewBox="0 0 24 24">
+              {isOpen ? (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M6 18L18 6M6 6l12 12" />
+              ) : (
+                <path strokeLinecap="round" strokeLinejoin="round" d="M4 6h16M4 12h16m-7 6h7" />
+              )}
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu (Dropdown) */}
+        {isOpen && (
+          <ul className="absolute bg-white border border-gray-300 rounded-lg shadow-lg z-10 top-12 right-0 w-48">
+            {navItems.map((item, index) => (
+              <li key={index}>
+                <Link
+                  href={item.href}
+                  className="block text-gray-700 text-center py-2 hover:text-red-500 mb-2"
+                  onClick={handleMenuItemClick} // Close menu when item is clicked
+                >
                   {item.name}
                 </Link>
               </li>
             ))}
-            {/* Search Input Section */}
-            <div className="hidden lg:block">
-              <ul className="flex flex-col gap-2 mt-2 mb-4 lg:mb-0 lg:mt-0 lg:flex-row lg:items-center lg:gap-6">
-                <li>
-                  <form
-                    className="max-w-md mx-auto"
-                    onSubmit={handleSearchSubmit}
-                  >
-                    <label
-                      htmlFor="default-search"
-                      className="mb-2 text-sm font-medium text-gray-900 sr-only dark:text-white"
+            {/* Search Bar for Mobile */}
+            <form onSubmit={handleSearchSubmit} className="relative mx-auto w-3/4 mb-2">
+              <input
+                type="text"
+                className="border border-gray-300 rounded-lg px-4 py-2 w-full focus:ring-2 focus:ring-blue-500"
+                placeholder="Search..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+              />
+              {filteredSuggestions.length > 0 && (
+                <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-lg z-10">
+                  {filteredSuggestions.map((post) => (
+                    <li
+                      key={post.id}
+                      className="p-2 cursor-pointer hover:bg-gray-100 hover:text-red-500"
+                      onClick={() => handleSuggestionClick(post)} // Close menu when suggestion is clicked
                     >
-                      Search
-                    </label>
-                    <div className="relative">
-                      <div className="absolute inset-y-0 start-0 flex items-center ps-3 pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500 dark:text-gray-400"
-                          aria-hidden="true"
-                          xmlns="http://www.w3.org/2000/svg"
-                          fill="none"
-                          viewBox="0 0 20 20"
-                        >
-                          <path
-                            stroke="currentColor"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth="2"
-                            d="m19 19-4-4m0-7A7 7 0 1 1 1 8a7 7 0 0 1 14 0Z"
-                          />
-                        </svg>
-                      </div>
-                      <input
-                        type="text"
-                        id="default-search"
-                        className="block w-full p-2 ps-10 text-sm text-gray-900 border border-gray-300 rounded-lg bg-gray-50 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                        placeholder="Search here..."
-                        value={searchQuery}
-                        onChange={handleSearchChange}
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            handleSearchSubmit(e); // Trigger form submit if Enter is pressed
-                          }
-                        }}
-                      />
-
-                      {/* Autocomplete Suggestions */}
-                      {filteredSuggestions.length > 0 && (
-                        <ul className="absolute w-full bg-white border border-gray-300 mt-1 rounded-lg shadow-lg z-10">
-                          {filteredSuggestions.map((post) => (
-                            <li
-                              key={post.id}
-                              className="flex items-center p-1 text-lg gap-x-2 text-slate-600 hover:text-red-500"
-                              onClick={() => handleSuggestionClick(post)}
-                            >
-                              {post.title} (ID: {post.id}, User: {post.userId})
-                            </li>
-                          ))}
-                        </ul>
-                      )}
-                    </div>
-                  </form>
-                </li>
-              </ul>
-            </div>
-          </div>
-        </div>
-      </nav>
-    </div>
+                      {post.title}
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </form>
+          </ul>
+        )}
+      </div>
+    </nav>
   );
 }
