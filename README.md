@@ -102,4 +102,4 @@ Visit http://localhost:3000
 
 * Deployed to Vercel:
 
-    - Live preview available at []
+    - Live preview available at [https://blog-two-eosin-54.vercel.app/]
