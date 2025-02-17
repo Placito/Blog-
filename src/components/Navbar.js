@@ -1,5 +1,4 @@
 "use client"; // This tells Next.js that this is a client-side component (important for hooks like useState)
-
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useRouter } from "next/router";

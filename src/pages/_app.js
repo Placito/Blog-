@@ -1,6 +1,6 @@
 import React from "react"; // Import React library for JSX support
-import "../pages/styles/globals.css"; // Import global styles for the application
-import '../pages/styles/footer.css';
+import "./styles/globals.css"; // Import global styles for the application
+import './styles/footer.css';
 import Navbar from "../components/Navbar"; // Import the Navbar component for site navigation
 import Footer from "../components/Footer"; // Import the Footer component for the footer content
 import Head from "next/head"; // Import Head from Next.js to manage the head of the page (meta tags, title, etc.)
